@@ -4,6 +4,41 @@ secretctl
 GPG wrapper to simplify multi-user encryption/decryption of secrets
 
 
+usage
+--------------
+Usage can be seen by running `secretctl` with no args
+
+```
+Usage: secretctl CMD [ARGS]
+
+A simple gpg-based workflow for shared encryption of secrets.
+
+secretctl works by maintaining a directory containing public keys
+and a keyfile that maps the key ID to the key name (basename of the key file)
+
+Generate a key with: gpg --gen-key
+
+Commands:
+
+  export KEYID [KEYNAME]  Adds a new key that will be used in future encryptions
+                          KEYID is the hex ID of a public key which is output when
+                              creating (gpg --gen-key) or listing keys (gpg --list-keys):
+                              - given: pub rsa2048/A69BF163 2015-03-29
+                              - KEYID is A69BF163
+                          KEYNAME is a human-recognizable short name for the key
+                              Defaults to ${user}_$(hostname)
+
+  import                  Imports all public keys in the keydir into your keychain
+                          This allows encryption of files that can be decrypted by others
+
+  encrypt FILENAME        Encrypts a file with all the public keys in the keydir
+                          Outputs the encrypted file as FILENAME.gpg
+
+  decrypt FILENAME        Decrypts a file with your keyring
+                          Outputs the decrypted file without the .gpg suffix
+```
+
+
 workflow
 --------
 
@@ -42,39 +77,4 @@ Complete. Encrypted to my_secret.gpg
 $ rm my_secret
 
 # Now my_secret can be decrypted by either user
-```
-
-
-detailed usage
---------------
-Usage can be seen by running `secretctl` with no args
-
-```
-Usage: secretctl CMD [ARGS]
-
-A simple gpg-based workflow for shared encryption of secrets.
-
-secretctl works by maintaining a directory containing public keys
-and a keyfile that maps the key ID to the key name (basename of the key file)
-
-Generate a key with: gpg --gen-key
-
-Commands:
-
-  export KEYID [KEYNAME]  Adds a new key that will be used in future encryptions
-                          KEYID is the hex ID of a public key which is output when
-                              creating (gpg --gen-key) or listing keys (gpg --list-keys):
-                              - given: pub rsa2048/A69BF163 2015-03-29
-                              - KEYID is A69BF163
-                          KEYNAME is a human-recognizable short name for the key
-                              Defaults to ${user}_$(hostname)
-
-  import                  Imports all public keys in the keydir into your keychain
-                          This allows encryption of files that can be decrypted by others
-
-  encrypt FILENAME        Encrypts a file with all the public keys in the keydir
-                          Outputs the encrypted file as FILENAME.gpg
-
-  decrypt FILENAME        Decrypts a file with your keyring
-                          Outputs the decrypted file without the .gpg suffix
 ```
