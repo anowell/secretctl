@@ -7,7 +7,7 @@ GPG wrapper to simplify multi-user encryption/decryption of secrets
 workflow
 --------
 
-This is the basic workflow enabled by `secretctl`
+This is the basic workflow to encrypt and decrypt a secret:
 
 ```
 $ echo "top secret stuff" > my_secret
@@ -24,7 +24,10 @@ $ secretctl decrypt my_secret.gpg
 Complete. Decrypted to my_secret
 $ cat my_secret
 top secret stuff
+```
 
+This is the workflow for re-encrypting a secret for an additional user to access:
+```
 # After another user exports a GPG key using secretctl:
 $ secretctl import
 Importing /path/to/gpg/anowell_olaf.pub
