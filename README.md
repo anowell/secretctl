@@ -20,7 +20,7 @@ Generate a key with: gpg --gen-key
 
 Commands:
 
-  export KEYID [KEYNAME]  Exports a gpg key to be shared for future encryptions.
+  share KEYID [KEYNAME]   Exports a gpg key to be shared for future encryptions.
                               Exports to .gpg-keys keydir searching up from working dir
                               Will create .gpg-keys in current directory if not found
                           KEYID is the hex ID of a public key which is output when
@@ -28,10 +28,10 @@ Commands:
                               - given: pub rsa2048/A69BF163 2015-03-29
                               - KEYID is A69BF163
                           KEYNAME is a human-recognizable short name for the key
-                              Defaults to anowell_olaf
+                              Defaults to USER_HOSTNAME
 
-  import                  Imports all public keys in the keydir into your keychain
-                          This allows encryption of files that can be decrypted by others
+  sync                    Synchronizes keydir with keychain by importing all public keys
+                          in the keydir into your keychain
 
   encrypt FILENAME ...    Encrypts one or more files with all the public keys in the keydir
                           Outputs the encrypted file(s) as FILENAME.gpg
@@ -40,6 +40,15 @@ Commands:
                           Outputs the decrypted file(s) without the .gpg suffix
 
   clean                   Remove all decrypted files that have an encrypted counterpart
+
+  sign                    Sign all imported keys with your own private key.
+                          This allows encryption of files without gpg prompting about untrusted keys
+
+  trust                   Set trust level on all imported public keys to '5' (full trust)
+                          This allows encryption of files without gpg prompting about untrusted
+                          keys if the keys are signed by another trusted user.
+
+  list                    List all public keys which have been imported to your local store.
 ```
 
 
@@ -52,8 +61,8 @@ $ gpg --gen-key
 ...interactive key generation...
 gpg: key A59B011E marked as ultimately trusted
 ...snip...
-$ secretctl export A59B011E
-Complete. Exported A59B011E as anowell_olaf and added to the keylist.
+$ secretctl share A59B011E
+Complete. Sharing A59B011E as anowell_olaf and added to the keylist.
 ```
 
 This is the basic workflow to encrypt and decrypt a secret:
@@ -72,7 +81,7 @@ top secret stuff
 This is the workflow for re-encrypting a secret for an additional user to access:
 ```
 # After another user exports a GPG key using secretctl:
-$ secretctl import
+$ secretctl sync
 Importing /path/to/gpg/anowell_olaf.pub
 ...snip...
 Importing /path/to/gpg/johndoe_serenity.pub
