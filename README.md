@@ -39,14 +39,10 @@ Commands:
   decrypt FILENAME ...    Decrypts one or more files with your keyring
                           Outputs the decrypted file(s) without the .gpg suffix
 
+  reencrypt FILENAME ...  Re-encrypts one or more files with your keyring
+                          This command simplifies the process of decrypting and then encrypting
+
   clean                   Remove all decrypted files that have an encrypted counterpart
-
-  sign                    Sign all imported keys with your own private key.
-                          This allows encryption of files without gpg prompting about untrusted keys
-
-  trust                   Set trust level on all imported public keys to '5' (full trust)
-                          This allows encryption of files without gpg prompting about untrusted
-                          keys if the keys are signed by another trusted user.
 
   list                    List all public keys which have been imported to your local store.
 ```
