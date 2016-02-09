@@ -63,11 +63,14 @@ Complete. Sharing A59B011E as anowell_olaf and added to the keylist.
 
 This is the basic workflow to encrypt and decrypt a secret:
 ```
+# Encrypt the secret
 $ echo "top secret stuff" > my_secret
 $ secretctl encrypt my_secret
 Complete. Encrypted as my_secret.gpg
 $ secretctl clean
 removed 'my_secret'
+
+# Decrypt the secret
 $ secretctl decrypt my_secret.gpg
 Complete. Decrypted to my_secret
 $ cat my_secret
@@ -79,16 +82,18 @@ This is the workflow for re-encrypting a secret for an additional user to access
 # After another user exports a GPG key using secretctl:
 $ secretctl sync
 Importing /path/to/gpg/anowell_olaf.pub
-...snip...
+... Do you want to sign? [y/N]
 Importing /path/to/gpg/johndoe_serenity.pub
-...snip...
+... Do you want to sign? [y/N]
 Finished importing all public keys. Ready to encrypt.
-$ secretctl decrypt my_secret.gpg
-Complete. Decrypted to my_secret
-$ secretctl encrypt my_secret
-Complete. Encrypted to my_secret.gpg
-$ secretctl clean
-removed 'my_secret'
+
+# Reencrypt with the newly imported GPG recipients
+$ secretctl reencrypt my_secret.gpg
+Decrypting my_secret.gpg
+Decrypted to my_secret
+Encrypting my_secret
+Encrypted as my_secret.gpg
+Completed. Finished reencrypting 1 file(s)
 
 # Now my_secret can be decrypted with the private key for either anowell_olaf or johndoe_serenity
 ```
